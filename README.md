@@ -1,6 +1,8 @@
 # QStreamFPV
 Example Qt6 Applicatine with GStreamer
 
+![](Screenshot0.png)
+
 # 概要
 
 このアプリケーションはGStreamerを使って映像や音声をストリーミングすることができます。  
@@ -145,8 +147,8 @@ Macbookはハードウェアエンコードのため高速です。
 | raspberrypi4      |      ー      |       ー      |    v4l2h264enc   |    v4l2h265enc   |
 | raspberrypi5      |  openh264enc | not supported |        ー        |        ー        |
 ## Receiver
-|                   | H264 Encoder | H265 Encoder  | H264 Encoder(HW) | H265 Encoder(HW) |
-|-------------------|--------------|---------------|------------------|------------------|
+|                   | H264 Encoder |  H265 Encoder | H264 Encoder(HW) | H265 Encoder(HW) |
+|-------------------|:------------:|:-------------:|:----------------:|:----------------:|
 | Linux(GPU:None)   |  openh264dec | not supported |        ー        |        ー        |
 | Linux(GPU:Nvidia) |      ー      |       ー      |   nvv4l2decoder  |   nvv4l2decoder  |
 | Linux(GPU:Intel)  |      ー      |       ー      |   vaapih264dec   |   vaapih265dec   |
