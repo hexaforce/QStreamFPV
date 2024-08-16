@@ -3,9 +3,9 @@ Example Qt6 Applicatine with GStreamer
 
 # 概要
 
-このアプリケーションはGStreamerを使って映像や音声をストリーミングすることができます。
-1対1のUnicastを想定しており、BroadcastやMulticastなどは想定していません。
-ReceiverとTransmitterに分かれており、QtCreatorを使って作成しました。
+このアプリケーションはGStreamerを使って映像や音声をストリーミングすることができます。  
+1対1のUnicastを想定しており、BroadcastやMulticastなどは想定していません。  
+ReceiverとTransmitterに分かれており、QtCreatorを使って作成しました。  
 
 Receiverは下記のマシンで動作させることができます。
 * Fedora40
@@ -32,6 +32,7 @@ Jetson NanoとRaspberry Pi 4はハードウェアエンコードを利用しま�
 Raspberry Pi 5ハードウェアエンコードがサポートされていないためソフトウェアエンコードのみとなります。  
 CPU温度に注意してください。  
 
+![](Screenshot1.png)
 # ビルド
 ## Linux
 必要となるものは、QtCreatorとGStreamerです。
@@ -172,5 +173,4 @@ make
 ./QStreamFPV/Transmitter
 ```
 
-![](Screenshot1.png)
 ![](Screenshot2.png)
