@@ -83,7 +83,7 @@ Macのgst-plugins-goodパッケージにはqml6glsinkが含まれていないた
 ### ネットワークの設定
 * RouterMode  
 ```cpp
-  // Network Mode
+  // RouterMode Mode
   defaultValues["network/mode"] = "RouterMode"; 
   defaultValues["receiver/ip_address"] = "192.168.1.1";
   defaultValues["transmitter/ip_address"] = "192.168.1.2";
@@ -92,48 +92,49 @@ Macのgst-plugins-goodパッケージにはqml6glsinkが含まれていないた
 ReceiverとTransmitterのIPアドレスが必要になります。
 
 * AccessPointMode  
+hostapdとdnsmasqを使ってReceiverとTransmitterをWifi接続します。    
 ```cpp
-  // Network Mode
+  // AccessPoint Mode
+  defaultValues["network/mode"] = "AccessPointMode"; 
+  defaultValues["wifi/access_point"] = "Transmitter"; //  Transmitter or Receiver
+
+  defaultValues["wifi/network_interface"] = "wlan0";
+
   defaultValues["wifi/ssid"] = "QStreamFPV";
   defaultValues["wifi/passphrase"] = "QStreamFPV";
-  defaultValues["wifi/access_point"] = "Receiver"; // Receiver or Transmitter
+
+  defaultValues["wifi/region_code"] = "US";
+  defaultValues["wifi/channel"] = 40; // 5200 MHz
+
   defaultValues["wifi/access_point_ip_address"] = "10.10.10.10";
-  defaultValues["wifi/start_dhcp_range"] = "10.10.10.11";
-  defaultValues["wifi/end_dhcp_range"] = "10.10.10.100";
+  defaultValues["wifi/dhcp_range_start"] = "10.10.10.11";
+  defaultValues["wifi/dhcp_range_end"] = "10.10.10.111";
   defaultValues["wifi/subnet_mask"] = "255.192.0.0"; // /10
-  defaultValues["wifi/dnsmasq_port"] = 1053;
-  defaultValues["receiver/network_interface"] = "wlan0";
-  defaultValues["transmitter/network_interface"] = "wlan0";
+
+  defaultValues["wifi/dnsmasq_service_port"] = 1053;
 ```
-hostapdとdnsmasqを使ってReceiverとTransmitterをWifi接続します。  
-ReceiverとTransmitterのインターフェース名が必要になります。    
 ReceiverかTransmitterのどちらかをアクセスポイントとして接続します。  
-hostapdの設定も修正する必要があります。  
-[hostapd.conf](QStreamFPV/wifi/hostapd.conf)
-Wifiは5Ghz(48ch)を使用するようになっています。  
+Wifiは5Ghz(40ch)を使用するようになっています。  
 2.4Ghzを使用する場合はチャンネルを変更してください。  
 
 ### コーデックの設定
 * Video Codec
 ```cpp
   // Video Codec
-  defaultValues["receiver/video_codec"] = "H264";    // H264 or H265
-  defaultValues["transmitter/video_codec"] = "H264"; // H264 or H265
+  defaultValues["gstreamer/video_codec"] = "H264"; // H264 or H265 or SupportedH264
 ```
 動画のコーデックを指定します。  
 H264かH265が利用できます。  
+カメラがH264をサポートしている場合はSupportedH264を使用できます  
 
 ### GPUの設定
-* GPU Support
+* エンコード/デコードでGPUを使用するかどうかを設定します。  
 ```cpp
   // GPU Support
-  defaultValues["receiver/gpu_support"] = "None";    // None or Nvidia or Intel
-  defaultValues["transmitter/gpu_support"] = "None"; // None or Nvidia or Intel
+  defaultValues["gstreamer/gpu_support"] = "None"; // None or Nvidia or Intel
 ```
-エンコード/デコードでGPUを使用するかどうかを設定します。  
-GPUはLinux(Fedora/Ubuntu)の時に有効になります。  
-Noneを使用するとソフトウェはエンコード/デコードになります。  
-Macbookはハードウェアエンコードのため高速です。  
+GPU搭載Linuxの時に有効になります。  
+Noneを使用するとソフトウェによるエンコード/デコードになります。  
 下記にGStreamerで使用するエンコーダとデコーダを記します。
 
 ## Transmitter
@@ -153,26 +154,26 @@ Macbookはハードウェアエンコードのため高速です。
 | Linux(GPU:Nvidia) |      ー      |       ー      |   nvv4l2decoder  |   nvv4l2decoder  |
 | Linux(GPU:Intel)  |      ー      |       ー      |   vaapih264dec   |   vaapih265dec   |
 | MacbookPro        |      ー      |       ー      |     vtdec_hw     |     vtdec_hw     |
-### 音声ストリーミングの設定
+### 音声ストリーミングの設定  
+* 音声のストリーミングを有効にします。  
 ```cpp
   // Transmitter Audio
   defaultValues["transmitter/enable_audio"] = true;
 ```
-音声のストリーミングを有効にします。  
 音声コーデックはOpusを使用します。
 
 # 実行
-QtCreatorでビルド＆実行できます。  
-基本的にはqmakeでビルドするとバイナリができるので実行するだけです。
+基本的にはqmakeでビルドしたバイナリができるので実行するだけです。
 ## Jetson/RaspberryPi
 ```bash
 cd QStreamFPV
-sudo apt install gstreamer1.0-* libgstreamer*
-sudo apt install qt6-* libqt6*
-sudo apt install qml-* qml6-* qtquick*
-qmake
-make
-./QStreamFPV/Transmitter
+sudo apt install librust-gstreamer-video-sys-dev gstreamer1.0-plugins-*
+sudo apt install gstreamer1.0-libcamera
+sudo apt install hostapd dnsmasq
+sudo apt install qt6-base-dev
+qmake Transmitter.pro
+make -j4
+./Transmitter
 ```
 
 ![](Screenshot2.png)

@@ -4,5 +4,5 @@ SUBDIRS += \
     Transmitter \
     Receiver
 
-Transmitter.file = QStreamFPV/Transmitter.pro
-Receiver.file = QStreamFPV/Receiver.pro
+Transmitter.file = Transmitter.pro
+Receiver.file = Receiver.pro
